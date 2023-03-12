@@ -6589,6 +6589,18 @@ export interface NS {
    */
   prompt(
     txt: string,
+    options?: { type?: "boolean" },
+  ): Promise<boolean>;
+  prompt(
+    txt: string,
+    options: { type: "text" },
+  ): Promise<string>;
+  prompt<T extends string | number>(
+    txt: string,
+    options: { type: "select"; choices: T[] },
+  ): Promise<T>;
+  prompt(
+    txt: string,
     options?: { type?: "boolean" | "text" | "select"; choices?: string[] },
   ): Promise<boolean | string>;
 
