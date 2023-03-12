@@ -141,7 +141,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         throw helpers.makeRuntimeErrorMsg(ctx, String(e));
       }
     },
-      getActionRepGain: (ctx) => (_type, _name, _level) => {
+    getActionRepGain: (ctx) => (_type, _name, _level) => {
       checkBladeburnerAccess(ctx);
       const type = helpers.string(ctx, "type", _type);
       const name = helpers.string(ctx, "name", _name);
