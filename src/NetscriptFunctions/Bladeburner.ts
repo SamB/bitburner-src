@@ -8,6 +8,7 @@ import { BlackOperation } from "../Bladeburner/BlackOperation";
 import { helpers } from "../Netscript/NetscriptHelpers";
 import { checkEnum } from "../utils/helpers/enum";
 import { CityName } from "../Enums";
+import { Person } from "../PersonObjects/Person";
 
 export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
   const checkBladeburnerAccess = function (ctx: NetscriptContext): void {
@@ -115,12 +116,20 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         throw helpers.makeRuntimeErrorMsg(ctx, String(e));
       }
     },
-    getActionEstimatedSuccessChance: (ctx) => (_type, _name) => {
+    getActionEstimatedSuccessChance: (ctx) => (_type, _name, _sleeveNumber) => {
       const bladeburner = getBladeburner(ctx);
       const type = helpers.string(ctx, "type", _type);
       const name = helpers.string(ctx, "name", _name);
+      let person: Person = Player;
+      if (_sleeveNumber !== undefined) {
+        const sleeveNumber = helpers.number(ctx, "sleeveNumber", _sleeveNumber);
+        person = Player.sleeves[sleeveNumber];
+        if (!person) {
+          throw helpers.makeRuntimeErrorMsg(ctx, `Invalid sleeve number: ${sleeveNumber}`);
+        }
+      }
       try {
-        const chance = bladeburner.getActionEstimatedSuccessChanceNetscriptFn(Player, type, name);
+        const chance = bladeburner.getActionEstimatedSuccessChanceNetscriptFn(person, type, name);
         if (typeof chance === "string") {
           const errorLogText = `Invalid action: type='${type}' name='${name}'`;
           helpers.log(ctx, () => errorLogText);
@@ -132,7 +141,7 @@ export function NetscriptBladeburner(): InternalAPI<INetscriptBladeburner> {
         throw helpers.makeRuntimeErrorMsg(ctx, String(e));
       }
     },
-    getActionRepGain: (ctx) => (_type, _name, _level) => {
+      getActionRepGain: (ctx) => (_type, _name, _level) => {
       checkBladeburnerAccess(ctx);
       const type = helpers.string(ctx, "type", _type);
       const name = helpers.string(ctx, "name", _name);

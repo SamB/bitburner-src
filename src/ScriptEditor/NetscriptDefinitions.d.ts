@@ -2788,7 +2788,7 @@ export interface Bladeburner {
   getActionCurrentTime(): number;
 
   /**
-   * Get estimate success chance of an action.
+   * Get estimated success chance of an action.
    * @remarks
    * RAM cost: 4 GB
    *
@@ -2798,9 +2798,10 @@ export interface Bladeburner {
    *
    * @param type - Type of action.
    * @param name - Name of action. Must be an exact match.
+   * @param sleeveNumber - Optional. If not provided, success chance is for the player.
    * @returns Estimated success chance for the specified action.
    */
-  getActionEstimatedSuccessChance(type: string, name: string): [number, number];
+  getActionEstimatedSuccessChance(type: string, name: string, sleeveNumber?: number): [number, number];
 
   /**
    * Get the reputation gain of an action.
